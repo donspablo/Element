@@ -86,7 +86,7 @@ class Element
             ['siteTitle' => 'Website title',
                 'files' => 'element',
                 'defaultSite' => 'home',
-                'login' => 'loginURL',
+                'login' => 'cms',
                 'forceLogout' => false,
                 'forceHttps' => false,
                 'saveChangesPopup' => false,
@@ -103,7 +103,7 @@ class Element
                     'description' => 'A site description is also good for search engines.', 'content' => '<h1>Welcome to your website</h1>
 <p>Your password for editing everything is: <b>' . $password . '</b></p>
 
-<p><a href="' . self::url('loginURL') . '" class="button">Click here to login</a></p>
+<p><a href="' . self::url('cms') . '" class="button">Click here to login</a></p>
 
 <p>To install an awesome editor, open options/Plugins and click Install Summernote.</p>', self::DB_SITES_SUBSITE_KEY => (object)array()], 'how-to' => ['title' => 'How to', 'keywords' => 'Enter, keywords, for, this site', 'description' => 'A site description is also good for search engines.', 'content' => '<h2>Easy editing</h2>
 <p>After logging in, click anywhere to edit and click outside to save. Changes are live and shown immediately.</p>
@@ -1261,7 +1261,7 @@ class Element
         if (!$this->currentSiteExists) {
             $this->alert('info', '<b>This site (' . $this->currentSite . ') doesn\'t exist.</b> Editing the content below will create it.');
         }
-        if ($this->get('config', 'login') === 'loginURL') {
+        if ($this->get('config', 'login') === 'cms') {
             $this->alert('danger', 'Change your login URL and save it for later use. <a data-toggle="element-modal" href="#optionsModal" data-target-tab="#security"><b>Open security options</b></a>');
         }
         $this->checkModulesCache();
@@ -1395,7 +1395,7 @@ EOT;
         if ($this->loggedIn) {
             $output = '<div data-target="widgets" id="footer" class="editText editable">' . $this->get('widgets', 'footer')->content . '</div>';
         } else {
-            $output = $this->get('widgets', 'footer')->content . (!$this->loggedIn && $this->get('config', 'login') === 'loginURL' ? ' &bull; <a href="' . self::url('loginURL') . '">Login</a>' : '');
+            $output = $this->get('widgets', 'footer')->content . (!$this->loggedIn && $this->get('config', 'login') === 'cms' ? ' &bull; <a href="' . self::url('cms') . '">Login</a>' : '');
         }
         return $this->hook('footer', $output)[0];
     }

@@ -136,24 +136,12 @@ class FileCache {
     - [x] Documentation
 - [ ] Tables
     - [x] Users
-    - [x] Notes
-    - [x] Tasks
-    - [ ] Chat
-- [ ] Notes
-    - [x] Data Scheme
-    - [x] API Endpoints
-    - [x] Functions
-    - [ ] UI
-- [ ] Tasks
-    - [x] Data Scheme
-    - [x] API Endpoints
-    - [x] Functions
-    - [ ] UI
-- [ ] Chat
-    - [ ] Data Scheme
-    - [x] API Endpoints
-    - [x] Functions
-    - [ ] UI
+    - [x] CMS
+- [ ] CMS
+    - [ ] Collaborative Dashboard
+    - [ ] Reporting and Analytics
+    - [ ] Communication
+    - work in progress
 - [ ] Testing
     - [x] BUILDs
     - [x] Owners
@@ -248,7 +236,11 @@ https://gitpod.com/#https://github.com/donPabloNow/element
 
 ## Usage & How to Guide
 
-Navigate to the root of the project with your browser, register an account and then login.
+### Front-End - with members area.
+Navigate to the root of the project with your browser to view the Front-end of the project. On the front end you will find a stylish user registration and login form. After registering an account you will be able to login to the Front-End members area + dashboard.
+
+### Back-end - with CMS and user management.
+To access the CMS you need to vist <base_url>/cms and login using the password 'P@ssw0rd', this should be change as soon as you have logged into the CMS.
 
 ![image](https://user-images.githubusercontent.com/6468571/152181949-99b9aaa6-586e-4f64-826d-ec7616535d1c.png)
 

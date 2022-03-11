@@ -9,7 +9,7 @@ require '../index.php';
 final class ElementTest extends TestCase
 {
     private const DB_PATH = __DIR__ . '/../data_test/database_test.js';
-    private const PASSWORD = 'testPass';
+    private const PASSWORD = 'P@ssw0rd';
 
     /** @var Element */
     private $element;
@@ -29,7 +29,7 @@ final class ElementTest extends TestCase
         $this->assertTrue(property_exists($return, 'widgets'));
 
         $this->assertSame(strlen($return->config->password), 60);
-        $this->assertSame('loginURL', $return->config->login);
+        $this->assertSame('cms', $return->config->login);
 
         $this->assertSame('Home', $return->sites->home->title);
         $this->assertTrue(property_exists($return->sites->home, 'keywords'));
@@ -46,7 +46,7 @@ final class ElementTest extends TestCase
 
         // Setup
         $_SERVER['REQUEST_METHOD'] = 'POST';
-        $this->element->currentSite = 'loginURL';
+        $this->element->currentSite = 'cms';
 
         // Test Wrong password
         $_POST['password'] = 'wrongPass';
@@ -93,7 +93,7 @@ final class ElementTest extends TestCase
     public function testChangePasswordAction(): void
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
-        $this->element->currentSite = 'loginURL';
+        $this->element->currentSite = 'cms';
 
         $hashPass = password_hash(self::PASSWORD, PASSWORD_DEFAULT);
         $this->element->set('config', 'password', $hashPass);
