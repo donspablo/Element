@@ -1,0 +1,13 @@
+{
+  "BUILD": 1,
+  "files": {
+    "element": {
+      "name": "Element",
+      "repo": "https://github.com/donPabloNow/element-theme/tree/master",
+      "zip": "https://github.com/donPabloNow/element-theme/archive/master.zip",
+      "summary": "Default Element Files",
+      "BUILD": "3.2.1",
+      "image": "https://raw.githubusercontent.com/donPabloNow/element-theme/master/preview.jpg"
+    }
+  }
+}

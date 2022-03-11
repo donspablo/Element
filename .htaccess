@@ -1,0 +1,8 @@
+Options -Indexes
+ServerSignature Off
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+)$ index.php?site=$1 [QSA,L]
+RewriteRule data.json - [F]
+RewriteRule cache.json - [F]
