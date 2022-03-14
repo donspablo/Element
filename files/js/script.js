@@ -16,40 +16,6 @@ const _window = window, _windowinnerWidth = _window.innerWidth, _windowinnerHeig
 }(), _window.addEventListener("load", e => {
     setTimeout(loaded, 1500)
 });
-var THIS = null;
-
-function getEl() {
-    return THIS || (el = document.querySelector(".starwars"), audio = el.find("audio").get(0), start = el.find(".start"), animation = el.find(".animation"), THIS = this)
-}
-
-function resetStar() {
-    _this = getEl(), _start.show(), _cloned = _animation.clone(!0), _animation.remove(), _animation = _cloned, THIS = _this
-}
-
-function StarWars() {
-    document.querySelector(".starwars").addClass("on"), _this = getEl(), _start.hide(), _audio.play(), _el.append(_animation), THIS = _this
-}
-
-function Login() {
-    document.querySelector("html").addClass("login"), StarWars(), setTimeout(startChat, 1e4), setTimeout(startGame, 15e3)
-}
-
-function generateTree() {
-    var e = ((t = trees[trees.length - 1]) ? t.x : 0) + 30 + Math.floor(120 * Math.random()),
-        t = ["#6D8821", "#8FAC34", "#98B333"][Math.floor(3 * Math.random())];
-    trees.push({x: e, color: t})
-}
-
-function generatePlatform() {
-    var e = (t = platforms[platforms.length - 1]).x + t.w + 40 + Math.floor(160 * Math.random()),
-        t = 20 + Math.floor(80 * Math.random());
-    platforms.push({x: e, w: t})
-}
-
-function drawZ() {
-    ctx.save(), ctx.clearRect(0, 0, _window.innerWidth, _window.innerHeight), drawBackground(), ctx.translate((_window.innerWidth - canvasWidth) / 2 - sceneOffset, (_window.innerHeight - canvasHeight) / 2), drawPlatforms(), drawHero(), drawSticks(), ctx.restore()
-}
-
 !function (e, t) {
     "use strict";
 
@@ -162,7 +128,7 @@ function drawZ() {
     }), e.Notifi = s
 }(window, document), sssl(["/js/signIn.js", "/js/signOut.js"], function () {
         document.querySelector("[required='required']") && document.querySelector("[required='required']").blur(function () {
-            document.querySelector(this).val() ? document.querySelector(this).hasClass("hasError") && document.querySelector(this).removeClass("hasError") : document.querySelector(this).addClass("hasError")
+            document.querySelector(this).val() ? document.querySelector(this).hasClass("hasError") && document.querySelector(this).removeClass("hasError") : document.querySelector(this).classList.add("hasError")
         });
         document.querySelector("[required='required']") && document.querySelector("[required='required']").change(function () {
             document.querySelector(this).hasClass("hasError") && document.querySelector(this).removeClass("hasError")
@@ -342,54 +308,19 @@ function drawZ() {
     }
 )
 
-function onTabClick(e, t) {
-    e.preventDefault(), t = document.querySelector(t.attr("href")).offset().top - tabContainerHeight + 1, document.querySelector("html, body").animate({scrollTop: t}, 600)
+
+var THIS = null;
+
+function getEl() {
+    return THIS || (el = document.querySelector(".starwars"), audio = el.find("audio").get(0), start = el.find(".start"), animation = el.find(".animation"), THIS = this)
 }
 
-function onScroll() {
-    checkHeaderPosition(), findCurrentTabSelector(), lastScroll = window.scrollTop()
+function resetStar() {
+    _this = getEl(), _start.show(), _cloned = _animation.clone(!0), _animation.remove(), _animation = _cloned, THIS = _this
 }
 
-function onResize() {
-    currentId && setSliderCss()
-}
-
-function checkHeaderPosition() {
-    75 < window.scrollTop() ? document.querySelector(".header").addClass("header--scrolled") : document.querySelector(".header").removeClass("header--scrolled");
-    var e = document.querySelector(".nav").offset().top + document.querySelector(".nav").height() - tabContainerHeight - 75;
-    window.scrollTop() > lastScroll && window.scrollTop() > e ? (document.querySelector(".header").addClass("et-header--move-up"), document.querySelector(".nav-container").removeClass("nav-container--top-first"), document.querySelector(".nav-container").addClass("nav-container--top-second")) : window.scrollTop() < lastScroll && window.scrollTop() > e ? (document.querySelector(".header").removeClass("et-header--move-up"), document.querySelector(".et-hero-tabs-container").addClass("et-hero-tabs-container--top-first")) : (document.querySelector(".header").removeClass("header--move-up"), document.querySelector(".nav-container").removeClass("nav-container--top-first"), document.querySelector(".nav-container").removeClass("nav-container--top-second"))
-}
-
-function findCurrentTabSelector(e) {
-    let t, n, o = this;
-    document.querySelector(".nav-tab").each(function () {
-        var e = document.querySelector(this).attr("href"),
-            i = document.querySelector(e).offset().top - o.tabContainerHeight,
-            r = document.querySelector(e).offset().top + document.querySelector(e).height() - o.tabContainerHeight;
-        window.scrollTop() > i && window.scrollTop() < r && (t = e, n = document.querySelector(this))
-    }), currentId === t && null !== currentId || (currentId = t, currentTab = n, setSliderCss())
-}
-
-function setSliderCss() {
-    let e = 0, t = 0;
-    currentTab && (e = currentTab.css("width"), t = currentTab.offset().left), document.querySelector(".nav-tab-slider").css("width", e), document.querySelector(".nav-tab-slider").css("left", t)
-}
-
-function loaded() {
-    if (document.querySelector("html").classList.add("loaded"), "serviceWorker" in navigator) try {
-        navigator.serviceWorker.register("/serviceworker.js")
-    } catch (e) {
-        console.log("SW registration failed")
-    }
-    currentId = null, currentTab = null, tabContainerHeight = 70, lastScroll = 0;
-    var e = this;
-    document.querySelector(".nav-tab").click(function () {
-        e.onTabClick(event, document.querySelector(this))
-    }), window.scroll(() => {
-        onScroll()
-    }), window.resize(() => {
-        onResize()
-    })
+function Login() {
+    document.querySelector("html").classList.add("login"), document.querySelector(".starwars").classList.add("on"), _this = getEl(), _start.hide(), _audio.play(), _el.append(_animation), THIS = _this
 }
 
 function onTabClick(e, t) {
@@ -405,9 +336,9 @@ function onResize() {
 }
 
 function checkHeaderPosition() {
-    75 < window.scrollTop() ? document.querySelector(".header").addClass("header--scrolled") : document.querySelector(".header").removeClass("header--scrolled");
+    75 < window.scrollTop() ? document.querySelector(".header").classList.add("header--scrolled") : document.querySelector(".header").removeClass("header--scrolled");
     var e = document.querySelector(".nav").offset().top + document.querySelector(".nav").height() - tabContainerHeight - 75;
-    window.scrollTop() > lastScroll && window.scrollTop() > e ? (document.querySelector(".header").addClass("et-header--move-up"), document.querySelector(".nav-container").removeClass("nav-container--top-first"), document.querySelector(".nav-container").addClass("nav-container--top-second")) : window.scrollTop() < lastScroll && window.scrollTop() > e ? (document.querySelector(".header").removeClass("et-header--move-up"), document.querySelector(".et-hero-tabs-container").addClass("et-hero-tabs-container--top-first")) : (document.querySelector(".header").removeClass("header--move-up"), document.querySelector(".nav-container").removeClass("nav-container--top-first"), document.querySelector(".nav-container").removeClass("nav-container--top-second"))
+    window.scrollTop() > lastScroll && window.scrollTop() > e ? (document.querySelector(".header").classList.add("et-header--move-up"), document.querySelector(".nav-container").removeClass("nav-container--top-first"), document.querySelector(".nav-container").classList.add("nav-container--top-second")) : window.scrollTop() < lastScroll && window.scrollTop() > e ? (document.querySelector(".header").removeClass("et-header--move-up"), document.querySelector(".et-hero-tabs-container").classList.add("et-hero-tabs-container--top-first")) : (document.querySelector(".header").removeClass("header--move-up"), document.querySelector(".nav-container").removeClass("nav-container--top-first"), document.querySelector(".nav-container").removeClass("nav-container--top-second"))
 }
 
 function findCurrentTabSelector(e) {
@@ -427,7 +358,7 @@ function setSliderCss() {
 
 function loaded() {
     if (document.querySelector("html").classList.add("loaded"), "serviceWorker" in navigator) try {
-        navigator.serviceWorker.register("/serviceworker.js")
+        navigator.serviceWorker.register("/sw.js")
     } catch (e) {
         console.log("SW registration failed")
     }

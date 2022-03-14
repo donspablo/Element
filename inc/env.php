@@ -2,28 +2,40 @@
 
 namespace Element\inc;
 
-foreach (@file($GLOBALS['APP_DIR'] . '/.env') as $line) {
 
-    if (substr($line, 0, 4) === '#')
-        continue;
-
-    list($name, $value) = explode('=', $line, 2);
-    $GLOBALS[$name] = $value;
+if (defined('PHPUNIT_TESTING') === false) {
+    $Element = new Env($_ENV);
+    $_ENV=$Element->init();
 }
 
-$GLOBALS['SITE_URL'] = ($GLOBALS['SITE_URL'] === 'default') ? "https://" . @$_SERVER['HTTP_HOST'] : $GLOBALS['SITE_URL'];
-$GLOBALS['SITE_EMAIL'] = $GLOBALS['SITE_EMAIL'];
+class Env
+{
+    private $env = [];
 
-//error_reporting(($GLOBALS['DEBUG'] !== 'true') ? 0 : 1);
+    public function __construct($env)
+    {
+        foreach (@file($env['APP_DIR'] . '/.env') as $line) {
 
-//date_default_timezone_set($GLOBALS['TIME_ZONE']);
+            if (substr($line, 0, 4) === '#')
+                continue;
 
-ini_set('SMTP', $GLOBALS['SMTP']);
-ini_set('smtp_port', $GLOBALS['smtp_port']);
-ini_set('username', $GLOBALS['username']);
-ini_set('password', $GLOBALS['password']);
-ini_set('sendmail_from', $GLOBALS['sendmail_from']);
+            list($name, $value) = explode('=', $line, 2);
+            if(!is_array($value))
+                $this->$env[$name]=$value;
+        }
 
+    }
 
+    function init(){
+        $this->$env['SITE_URL'] = ($this->$env['SITE_URL'] === 'default') ? "https://" . @$_SERVER['HTTP_HOST'] : $this->$env['SITE_URL'];
+        $this->$env['SITE_EMAIL'] = $this->$env['SITE_EMAIL'];
 
-//if (isset($_GET['signin'])) new signin();
+        ini_set('SMTP', $this->$env['SMTP']);
+        ini_set('smtp_port', $this->$env['smtp_port']);
+        ini_set('username', $this->$env['username']);
+        ini_set('password', $this->$env['password']);
+        ini_set('sendmail_from', $this->$env['sendmail_from']);
+
+        return $env;
+    }
+}

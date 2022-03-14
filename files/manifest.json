@@ -1,6 +1,6 @@
 {
-  "name": "Dashboard",
-  "short_name": "dash",
+  "name": "Element",
+  "short_name": "element",
   "icons": [
     {
       "src": "./img/android-chrome-192x192.png",

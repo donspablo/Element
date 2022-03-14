@@ -1,4 +1,4 @@
-const staticCacheName = "dashboard";
+const staticCacheName = "app";
 self.addEventListener("install", function (e) {
     e.waitUntil(
         caches.open(staticCacheName).then(function (cache) {

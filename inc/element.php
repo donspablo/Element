@@ -13,19 +13,6 @@ if (defined('PHPUNIT_TESTING') === false) {
 
 class Element
 {
-    private const MODULES_JSON_BUILD = 1;
-    private const FILES_DIR = 'files';
-    private const PLUGINS_DIR = 'plugins';
-    private const VALID_DIRS = [self::FILES_DIR, self::PLUGINS_DIR];
-    private const FILES_PLUGINS_TYPES = ['installs' => 'install', 'updates' => 'update', 'exists' => 'exist',];
-    public const DB_CONFIG = 'config';
-    public const DB_NAVIGATION_ITEMS = 'navigationItems';
-    public const DB_NAVIGATION_ITEMS_SUBSITE = 'subsites';
-    public const DB_SITES_KEY = 'sites';
-    public const DB_SITES_SUBSITE_KEY = 'subsites';
-    public const MIN_PASSWORD_LENGTH = 8;
-    public const ELEMENT_REPO = 'https://raw.githubusercontent.com/donPabloNow/element/master/';
-    public const ELEMENT_CDN_REPO = 'https://raw.githubusercontent.com/donPabloNow/element-cdn-files/master/';
     public $currentSite = '';
     public $currentSiteTree = [];
     public $currentSiteExists = false;
@@ -60,8 +47,8 @@ class Element
         if (!file_exists($this->dbPath)) {
             $this->checkFolder(dirname($this->dbPath));
             $this->checkFolder($this->filesPath);
-            $this->checkFolder($GLOBALS['APP_DIR'] . '/' . self::FILES_DIR);
-            $this->checkFolder($GLOBALS['APP_DIR'] . '/' . self::PLUGINS_DIR);
+            $this->checkFolder($GLOBALS['APP_DIR'] . '/' . $GLOBALS['FILES_DIR']);
+            $this->checkFolder($GLOBALS['APP_DIR'] . '/' . $GLOBALS['PLUGINS_DIR']);
             $this->createDb();
         }
         return json_decode(file_get_contents($this->dbPath), false);
@@ -81,9 +68,9 @@ class Element
     {
         $this->checkMinimumRequirements();
         $password = $this->generatePassword();
-        $this->db = (object)[self::DB_CONFIG =>
+        $this->db = (object)[$GLOBALS['DB_CONFIG'] =>
 
-            ['siteTitle' => 'Website title',
+            ['title' => 'Website title',
                 'files' => 'element',
                 'defaultSite' => 'home',
                 'login' => 'cms',
@@ -94,18 +81,18 @@ class Element
                 'lastLogins' => [],
                 'lastModulesSync' => null,
                 'customModules' => ['files' => [], 'plugins' => []],
-                'navigationItems' => ['0' => ['name' => 'Home', 'slug' => 'home', 'visibility' => 'show', self::DB_NAVIGATION_ITEMS_SUBSITE => (object)array()],
+                'navigationItems' => ['0' => ['name' => 'Home', 'slug' => 'home', 'visibility' => 'show', $GLOBALS['DB_NAVIGATION_ITEMS_SUBSITE'] => (object)array()],
                     '1' => ['name' => 'How to', 'slug' => 'how-to', 'visibility' => 'show',
-                        self::DB_NAVIGATION_ITEMS_SUBSITE => (object)array()]]],
+                        $GLOBALS['DB_NAVIGATION_ITEMS_SUBSITE'] => (object)array()]]],
             'sites' => ['404' => ['title' => '404', 'keywords' => '404', 'description' => '404', 'content' => '<div style="text-align: center;"><h1>404 - Site not found</h1></div>',
-                self::DB_SITES_SUBSITE_KEY => (object)array()],
+                $GLOBALS['DB_SITES_SUBSITE_KEY'] => (object)array()],
                 'home' => ['title' => 'Home', 'keywords' => 'Enter, site, keywords, for, search, engines',
                     'description' => 'A site description is also good for search engines.', 'content' => '<h1>Welcome to your website</h1>
 <p>Your password for editing everything is: <b>' . $password . '</b></p>
 
 <p><a href="' . self::url('cms') . '" class="button">Click here to login</a></p>
 
-<p>To install an awesome editor, open options/Plugins and click Install Summernote.</p>', self::DB_SITES_SUBSITE_KEY => (object)array()], 'how-to' => ['title' => 'How to', 'keywords' => 'Enter, keywords, for, this site', 'description' => 'A site description is also good for search engines.', 'content' => '<h2>Easy editing</h2>
+<p>To install an awesome editor, open options/Plugins and click Install Summernote.</p>', $GLOBALS['DB_SITES_SUBSITE_KEY'] => (object)array()], 'how-to' => ['title' => 'How to', 'keywords' => 'Enter, keywords, for, this site', 'description' => 'A site description is also good for search engines.', 'content' => '<h2>Easy editing</h2>
 <p>After logging in, click anywhere to edit and click outside to save. Changes are live and shown immediately.</p>
 
 <h2>Create new site</h2>
@@ -116,7 +103,7 @@ class Element
 
 <h2><b>Support element</b></h2>
 <p>element is free for over 12 years.<br>
-<a href="https://swag.element.com" target="_blank"><u>Click here to support us by getting a T-shirt</u></a> or <a href="https://www.element.com/donate" target="_blank"><u>with a donation</u></a>.</p>', self::DB_SITES_SUBSITE_KEY => (object)array()]], 'widgets' => ['subside' => ['content' => '<h2>About your website</h2>
+<a href="https://swag.element.com" target="_blank"><u>Click here to support us by getting a T-shirt</u></a> or <a href="https://www.element.com/donate" target="_blank"><u>with a donation</u></a>.</p>', $GLOBALS['DB_SITES_SUBSITE_KEY'] => (object)array()]], 'widgets' => ['subside' => ['content' => '<h2>About your website</h2>
 
 <br>
 <p>Website description, contact form, mini map or anything else.</p>
@@ -144,7 +131,7 @@ class Element
     public function generatePassword(): string
     {
         $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-        return substr(str_shuffle($characters), 0, self::MIN_PASSWORD_LENGTH);
+        return substr(str_shuffle($characters), 0, $GLOBALS['MIN_PASSWORD_LENGTH']);
     }
 
     public static function url(string $location = ''): string
@@ -307,10 +294,10 @@ class Element
         $siteData = null;
         foreach ($arraySlugTree as $slug) {
             if ($siteData === null) {
-                $siteData = $this->get(self::DB_SITES_KEY)->{$slug} ?? null;
+                $siteData = $this->get($GLOBALS['DB_SITES_KEY'])->{$slug} ?? null;
                 continue;
             }
-            $siteData = $siteData->{self::DB_SITES_SUBSITE_KEY}->{$slug} ?? null;
+            $siteData = $siteData->{$GLOBALS['DB_SITES_SUBSITE_KEY']}->{$slug} ?? null;
             if (!$siteData) {
                 return null;
             }
@@ -455,7 +442,7 @@ class Element
 
     private function updateModulesCache(): void
     {
-        $elementModules = trim($this->getFileFromRepo('element-modules.json', self::ELEMENT_CDN_REPO));
+        $elementModules = trim($this->getFileFromRepo('element-modules.json'));
         $jsonObject = json_decode($elementModules);
         $parsedCache = $this->moduleCacheMapper($jsonObject);
         if (empty($parsedCache)) {
@@ -464,9 +451,9 @@ class Element
         $this->save($this->modulesCachePath, $parsedCache);
     }
 
-    public function getFileFromRepo(string $file, string $repo = self::ELEMENT_REPO): string
+    public function getFileFromRepo(string $file): string
     {
-        $repo = str_replace('https://github.com/', 'https://raw.githubusercontent.com/', $repo);
+        $repo = str_replace('https://github.com/', 'https://raw.githubusercontent.com/', $GLOBALS['ELEMENT_REPO']);
         return $this->downloadFileFromUrl($repo . $file);
     }
 
@@ -488,7 +475,7 @@ class Element
         $mappedModules = new stdClass;
         foreach ($elementModule as $type => $value) {
             if ($type === 'BUILD') {
-                if ($value !== self::MODULES_JSON_BUILD) {
+                if ($value !== $GLOBALS['MODULES_JSON_BUILD']) {
                     $this->alert('danger', 'The element-modules.json BUILD is filesorrect');
                     break;
                 }
@@ -558,14 +545,14 @@ class Element
         }
     }
 
-    public function getOfficialBUILD(string $repo = self::ELEMENT_REPO): ?string
+    public function getOfficialBUILD(): ?string
     {
-        return $this->getCheckFileFromRepo('BUILD', $repo);
+        return $this->getCheckFileFromRepo('BUILD');
     }
 
-    public function getCheckFileFromRepo(string $fileName, string $repo = self::ELEMENT_REPO): ?string
+    public function getCheckFileFromRepo(string $fileName): ?string
     {
-        $BUILD = trim($this->getFileFromRepo($fileName, $repo));
+        $BUILD = trim($this->getFileFromRepo($fileName));
         return $BUILD === '404: Not Found' || $BUILD === '400: Invalid request' ? null : $BUILD;
     }
 
@@ -615,17 +602,17 @@ class Element
         return strpos($url, 'element-modules.json') !== false;
     }
 
-    private function checkIfModuleRepoExists(string $repo, string $type): bool
+    private function checkIfModuleRepoExists(string $repo): bool
     {
-        $data = $this->getModulesCachedData($type);
+        $data = $this->getModulesCachedData();
         return in_array($repo, array_column($data, 'repo'));
     }
 
-    public function getModulesCachedData(string $type = self::FILES_DIR): array
+    public function getModulesCachedData(): array
     {
         $this->checkModulesCache();
         $data = $this->getJsonFileData($this->modulesCachePath);
-        return $data !== null && array_key_exists($type, $data) ? $data[$type] : [];
+        return $data !== null && array_key_exists($GLOBALS['FILES_DIR'], $data) ? $data[$GLOBALS['FILES_DIR']] : [];
     }
 
     public function checkModulesCache(): void
@@ -660,7 +647,7 @@ class Element
         $folderName = $_REQUEST['directoryName'];
         $type = $_REQUEST['type'];
         $path = sprintf('%s/%s/', $GLOBALS['APP_DIR'], $type);
-        if (in_array($type, self::VALID_DIRS, true)) {
+        if (in_array($type, [$GLOBALS['FILES_DIR'], $GLOBALS['PLUGINS_DIR']], true)) {
             $zipFile = $this->filesPath . '/ZIPFromURL.zip';
             $zipResource = fopen($zipFile, 'w');
             $ch = curl_init();
@@ -715,8 +702,8 @@ class Element
                 $this->redirect();
                 return;
             }
-            if (strlen($_POST['new_password']) < self::MIN_PASSWORD_LENGTH) {
-                $this->alert('danger', sprintf('Password must be longer than %d characters. <a data-toggle="element-modal" href="#optionsModal" data-target-tab="#security"><b>Re-open security options</b></a>', self::MIN_PASSWORD_LENGTH));
+            if (strlen($_POST['new_password']) < $GLOBALS['MIN_PASSWORD_LENGTH']) {
+                $this->alert('danger', sprintf('Password must be longer than %d characters. <a data-toggle="element-modal" href="#optionsModal" data-target-tab="#security"><b>Re-open security options</b></a>', $GLOBALS['MIN_PASSWORD_LENGTH']));
                 $this->redirect();
                 return;
             }
@@ -840,14 +827,14 @@ class Element
         }
         $slugTree = explode('/', $_GET['delete']);
         $this->deleteSiteFromDb($slugTree);
-        $allNavigationItems = $selectedNavigationItem = clone $this->get(self::DB_CONFIG, self::DB_NAVIGATION_ITEMS);
+        $allNavigationItems = $selectedNavigationItem = clone $this->get($GLOBALS['DB_CONFIG'], $GLOBALS['DB_NAVIGATION_ITEMS']);
         if (count(get_object_vars($allNavigationItems)) === 1) {
             $this->alert('danger', 'Last site cannot be deleted - at least one site must exist.');
             $this->redirect();
         }
         $selectedNavigationItemParent = $selectedNavigationItemKey = null;
         foreach ($slugTree as $slug) {
-            $selectedNavigationItemParent = $selectedNavigationItem->{self::DB_NAVIGATION_ITEMS_SUBSITE} ?? $selectedNavigationItem;
+            $selectedNavigationItemParent = $selectedNavigationItem->{$GLOBALS['DB_NAVIGATION_ITEMS_SUBSITE']} ?? $selectedNavigationItem;
             foreach ($selectedNavigationItemParent as $navigationItemKey => $navigationItem) {
                 if ($navigationItem->slug === $slug) {
                     $selectedNavigationItem = $navigationItem;
@@ -858,13 +845,13 @@ class Element
         }
         unset($selectedNavigationItemParent->{$selectedNavigationItemKey});
         $allNavigationItems = $this->reindexObject($allNavigationItems);
-        $defaultSite = $this->get(self::DB_CONFIG, 'defaultSite');
+        $defaultSite = $this->get($GLOBALS['DB_CONFIG'], 'defaultSite');
         $defaultSiteArray = explode('/', $defaultSite);
         $treeIntersect = array_intersect_assoc($defaultSiteArray, $slugTree);
         if ($treeIntersect === $slugTree) {
-            $this->set(self::DB_CONFIG, 'defaultSite', $allNavigationItems->{0}->slug);
+            $this->set($GLOBALS['DB_CONFIG'], 'defaultSite', $allNavigationItems->{0}->slug);
         }
-        $this->set(self::DB_CONFIG, self::DB_NAVIGATION_ITEMS, $allNavigationItems);
+        $this->set($GLOBALS['DB_CONFIG'], $GLOBALS['DB_NAVIGATION_ITEMS'], $allNavigationItems);
         $this->alert('success', 'Site <b>' . $slug . '</b> deleted.');
         $this->redirect();
     }
@@ -872,7 +859,7 @@ class Element
     public function deleteSiteFromDb(array $slugTree = null): void
     {
         $slug = array_pop($slugTree);
-        $selectedSite = $this->db->{self::DB_SITES_KEY};
+        $selectedSite = $this->db->{$GLOBALS['DB_SITES_KEY']};
         if (!empty($slugTree)) {
             foreach ($slugTree as $childSlug) {
                 $selectedSite = $selectedSite->{$childSlug}->subsites;
@@ -966,17 +953,17 @@ class Element
         }
         $name = empty($name) ? 'empty' : str_replace([PHP_EOL, '<br>'], '', $name);
         $slug = $this->createUniqueSlug($name, $navigation);
-        $navigationItems = $navigationSelectionObject = clone $this->get(self::DB_CONFIG, self::DB_NAVIGATION_ITEMS);
+        $navigationItems = $navigationSelectionObject = clone $this->get($GLOBALS['DB_CONFIG'], $GLOBALS['DB_NAVIGATION_ITEMS']);
         $navigationTree = explode('-', $navigation);
         $slugTree = [];
         $navigationKey = array_pop($navigationTree);
         if (count($navigationTree) > 0) {
             foreach ($navigationTree as $childNavigationKey) {
                 $childNavigation = $navigationSelectionObject->{$childNavigationKey};
-                if (!property_exists($childNavigation, self::DB_NAVIGATION_ITEMS_SUBSITE)) {
-                    $childNavigation->{self::DB_NAVIGATION_ITEMS_SUBSITE} = new stdClass;
+                if (!property_exists($childNavigation, $GLOBALS['DB_NAVIGATION_ITEMS_SUBSITE'])) {
+                    $childNavigation->{$GLOBALS['DB_NAVIGATION_ITEMS_SUBSITE']} = new stdClass;
                 }
-                $navigationSelectionObject = $childNavigation->{self::DB_NAVIGATION_ITEMS_SUBSITE};
+                $navigationSelectionObject = $childNavigation->{$GLOBALS['DB_NAVIGATION_ITEMS_SUBSITE']};
                 $slugTree[] = $childNavigation->slug;
             }
         }
@@ -984,20 +971,20 @@ class Element
         $navigationSelectionObject->{$navigationKey}->name = $name;
         $navigationSelectionObject->{$navigationKey}->slug = $slug;
         $navigationSelectionObject->{$navigationKey}->visibility = $visibility;
-        $navigationSelectionObject->{$navigationKey}->{self::DB_NAVIGATION_ITEMS_SUBSITE} = $navigationSelectionObject->{$navigationKey}->{self::DB_NAVIGATION_ITEMS_SUBSITE} ?? new stdClass;
-        $this->set(self::DB_CONFIG, self::DB_NAVIGATION_ITEMS, $navigationItems);
+        $navigationSelectionObject->{$navigationKey}->{$GLOBALS['DB_NAVIGATION_ITEMS_SUBSITE']} = $navigationSelectionObject->{$navigationKey}->{$GLOBALS['DB_NAVIGATION_ITEMS_SUBSITE']} ?? new stdClass;
+        $this->set($GLOBALS['DB_CONFIG'], $GLOBALS['DB_NAVIGATION_ITEMS'], $navigationItems);
         $this->updateSiteSlug($slugTree, $slug);
-        if ($this->get(self::DB_CONFIG, 'defaultSite') === implode('/', $slugTree)) {
+        if ($this->get($GLOBALS['DB_CONFIG'], 'defaultSite') === implode('/', $slugTree)) {
             array_pop($slugTree);
             $slugTree[] = $slug;
-            $this->set(self::DB_CONFIG, 'defaultSite', implode('/', $slugTree));
+            $this->set($GLOBALS['DB_CONFIG'], 'defaultSite', implode('/', $slugTree));
         }
     }
 
     public function createUniqueSlug(string $slug, string $navigation = null): string
     {
         $slug = $this->slugify($slug);
-        $allNavigationItems = $this->get(self::DB_CONFIG, self::DB_NAVIGATION_ITEMS);
+        $allNavigationItems = $this->get($GLOBALS['DB_CONFIG'], $GLOBALS['DB_NAVIGATION_ITEMS']);
         $navigationCount = count(get_object_vars($allNavigationItems));
         $navigationTree = $navigation ? explode('-', $navigation) : [];
         if (count($navigationTree)) {
@@ -1017,7 +1004,7 @@ class Element
     public function updateSiteSlug(array $slugTree, string $newSlugName): void
     {
         $slug = array_pop($slugTree);
-        $selectedSite = $this->db->{self::DB_SITES_KEY};
+        $selectedSite = $this->db->{$GLOBALS['DB_SITES_KEY']};
         if (!empty($slugTree)) {
             foreach ($slugTree as $childSlug) {
                 $selectedSite = $selectedSite->{$childSlug}->subsites;
@@ -1035,16 +1022,16 @@ class Element
         }
         $name = empty($name) ? 'empty' : str_replace([PHP_EOL, '<br>'], '', $name);
         $slug = $this->createUniqueSlug($name, $navigation);
-        $navigationItems = $navigationSelectionObject = clone $this->get(self::DB_CONFIG, self::DB_NAVIGATION_ITEMS);
+        $navigationItems = $navigationSelectionObject = clone $this->get($GLOBALS['DB_CONFIG'], $GLOBALS['DB_NAVIGATION_ITEMS']);
         $navigationTree = !empty($navigation) || $navigation === '0' ? explode('-', $navigation) : [];
         $slugTree = [];
         if (count($navigationTree)) {
             foreach ($navigationTree as $childNavigationKey) {
                 $childNavigation = $navigationSelectionObject->{$childNavigationKey};
-                if (!property_exists($childNavigation, self::DB_NAVIGATION_ITEMS_SUBSITE)) {
-                    $childNavigation->{self::DB_NAVIGATION_ITEMS_SUBSITE} = new stdClass;
+                if (!property_exists($childNavigation, $GLOBALS['DB_NAVIGATION_ITEMS_SUBSITE'])) {
+                    $childNavigation->{$GLOBALS['DB_NAVIGATION_ITEMS_SUBSITE']} = new stdClass;
                 }
-                $navigationSelectionObject = $childNavigation->{self::DB_NAVIGATION_ITEMS_SUBSITE};
+                $navigationSelectionObject = $childNavigation->{$GLOBALS['DB_NAVIGATION_ITEMS_SUBSITE']};
                 $slugTree[] = $childNavigation->slug;
             }
         }
@@ -1054,8 +1041,8 @@ class Element
         $navigationSelectionObject->{$navigationCount}->name = $name;
         $navigationSelectionObject->{$navigationCount}->slug = $slug;
         $navigationSelectionObject->{$navigationCount}->visibility = $visibility;
-        $navigationSelectionObject->{$navigationCount}->{self::DB_NAVIGATION_ITEMS_SUBSITE} = new stdClass;
-        $this->set(self::DB_CONFIG, self::DB_NAVIGATION_ITEMS, $navigationItems);
+        $navigationSelectionObject->{$navigationCount}->{$GLOBALS['DB_NAVIGATION_ITEMS_SUBSITE']} = new stdClass;
+        $this->set($GLOBALS['DB_CONFIG'], $GLOBALS['DB_NAVIGATION_ITEMS'], $navigationItems);
         if ($createSite) {
             $this->createSite($slugTree);
             $_SESSION['redirect_to_name'] = $name;
@@ -1069,7 +1056,7 @@ class Element
         $siteData = null;
         foreach ($slugTree as $parentSite) {
             if (!$siteData) {
-                $siteData = $this->get(self::DB_SITES_KEY)->{$parentSite};
+                $siteData = $this->get($GLOBALS['DB_SITES_KEY'])->{$parentSite};
                 continue;
             }
             $siteData = $siteData->subsites->{$parentSite} ?? null;
@@ -1081,7 +1068,7 @@ class Element
         }
         $slug = array_pop($slugTree);
         $siteSlug = $slug ?: $this->slugify($this->currentSite);
-        $allSites = $selectedSite = clone $this->get(self::DB_SITES_KEY);
+        $allSites = $selectedSite = clone $this->get($GLOBALS['DB_SITES_KEY']);
         $navigationKey = null;
         if (!empty($slugTree)) {
             foreach ($slugTree as $childSlug) {
@@ -1098,30 +1085,30 @@ class Element
                         $navigationKey = $this->findAndUpdateNavigationKey($navigationKey, $childSlug);
                     }
                 }
-                if (!property_exists($selectedSite->{$childSlug}, self::DB_SITES_SUBSITE_KEY)) {
-                    $selectedSite->{$childSlug}->{self::DB_SITES_SUBSITE_KEY} = new stdClass;
+                if (!property_exists($selectedSite->{$childSlug}, $GLOBALS['DB_SITES_SUBSITE_KEY'])) {
+                    $selectedSite->{$childSlug}->{$GLOBALS['DB_SITES_SUBSITE_KEY']} = new stdClass;
                 }
-                $selectedSite = $selectedSite->{$childSlug}->{self::DB_SITES_SUBSITE_KEY};
+                $selectedSite = $selectedSite->{$childSlug}->{$GLOBALS['DB_SITES_SUBSITE_KEY']};
             }
         }
-        $siteTitle = !$slug ? str_replace('-', ' ', $siteSlug) : $siteSlug;
+        $title = !$slug ? str_replace('-', ' ', $siteSlug) : $siteSlug;
         $selectedSite->{$slug} = new stdClass;
-        $selectedSite->{$slug}->title = mb_convert_case($siteTitle, MB_CASE_TITLE);
+        $selectedSite->{$slug}->title = mb_convert_case($title, MB_CASE_TITLE);
         $selectedSite->{$slug}->keywords = 'Keywords, are, good, for, search, engines';
         $selectedSite->{$slug}->description = 'A short description is also good.';
-        $selectedSite->{$slug}->{self::DB_SITES_SUBSITE_KEY} = new stdClass;
-        $this->set(self::DB_SITES_KEY, $allSites);
+        $selectedSite->{$slug}->{$GLOBALS['DB_SITES_SUBSITE_KEY']} = new stdClass;
+        $this->set($GLOBALS['DB_SITES_KEY'], $allSites);
         if ($createNavigationItem) {
-            $this->createNavigationItem($siteTitle, $navigationKey);
+            $this->createNavigationItem($title, $navigationKey);
         }
     }
 
     private function findAndUpdateNavigationKey(?string $navigationKey, string $slug): string
     {
         $navigationKeys = $navigationKey !== null ? explode('-', $navigationKey) : $navigationKey;
-        $navigationItems = json_decode(json_encode($this->get(self::DB_CONFIG, self::DB_NAVIGATION_ITEMS)), true);
+        $navigationItems = json_decode(json_encode($this->get($GLOBALS['DB_CONFIG'], $GLOBALS['DB_NAVIGATION_ITEMS'])), true);
         foreach ($navigationKeys as $key) {
-            $navigationItems = $navigationItems[$key][self::DB_NAVIGATION_ITEMS_SUBSITE] ?? [];
+            $navigationItems = $navigationItems[$key][$GLOBALS['DB_NAVIGATION_ITEMS_SUBSITE']] ?? [];
         }
         if (false !== ($index = array_search($slug, array_column($navigationItems, 'slug'), true))) {
             $navigationKey = $navigationKey === null ? $index : $navigationKey . '-' . $index;
@@ -1137,7 +1124,7 @@ class Element
             return;
         }
         $navigationTree = explode('-', $navigation);
-        $navigationItems = $navigationSelectionObject = clone $this->get(self::DB_CONFIG, self::DB_NAVIGATION_ITEMS);
+        $navigationItems = $navigationSelectionObject = clone $this->get($GLOBALS['DB_CONFIG'], $GLOBALS['DB_NAVIGATION_ITEMS']);
         if ($navigationTree) {
             $mainParentNavigation = array_shift($navigationTree);
             $navigationSelectionObject = $navigationItems->{$mainParentNavigation};
@@ -1146,7 +1133,7 @@ class Element
             }
         }
         $navigationSelectionObject->visibility = $visibility;
-        $this->set(self::DB_CONFIG, self::DB_NAVIGATION_ITEMS, $navigationItems);
+        $this->set($GLOBALS['DB_CONFIG'], $GLOBALS['DB_NAVIGATION_ITEMS'], $navigationItems);
     }
 
     public function orderNavigationItem(int $content, string $navigation): void
@@ -1156,7 +1143,7 @@ class Element
         }
         $navigationTree = $navigation ? explode('-', $navigation) : null;
         $mainParentNavigation = $selectedNavigationKey = array_shift($navigationTree);
-        $navigationItems = $navigationSelectionObject = clone $this->get(self::DB_CONFIG, self::DB_NAVIGATION_ITEMS);
+        $navigationItems = $navigationSelectionObject = clone $this->get($GLOBALS['DB_CONFIG'], $GLOBALS['DB_NAVIGATION_ITEMS']);
         if ($navigationTree) {
             $selectedNavigationKey = array_pop($navigationTree);
             $navigationSelectionObject = $navigationItems->{$mainParentNavigation}->subsites;
@@ -1169,23 +1156,23 @@ class Element
         $targetNavigation = $navigationSelectionObject->{$targetPosition};
         $navigationSelectionObject->{$selectedNavigationKey} = $targetNavigation;
         $navigationSelectionObject->{$targetPosition} = $selectedNavigation;
-        $this->set(self::DB_CONFIG, self::DB_NAVIGATION_ITEMS, $navigationItems);
+        $this->set($GLOBALS['DB_CONFIG'], $GLOBALS['DB_NAVIGATION_ITEMS'], $navigationItems);
     }
 
     public function updateSite(array $slugTree, string $fieldname, string $content): void
     {
         $slug = array_pop($slugTree);
-        $allSites = $selectedSite = clone $this->get(self::DB_SITES_KEY);
+        $allSites = $selectedSite = clone $this->get($GLOBALS['DB_SITES_KEY']);
         if (!empty($slugTree)) {
             foreach ($slugTree as $childSlug) {
-                if (!property_exists($selectedSite->{$childSlug}, self::DB_SITES_SUBSITE_KEY)) {
-                    $selectedSite->{$childSlug}->{self::DB_SITES_SUBSITE_KEY} = new stdClass;
+                if (!property_exists($selectedSite->{$childSlug}, $GLOBALS['DB_SITES_SUBSITE_KEY'])) {
+                    $selectedSite->{$childSlug}->{$GLOBALS['DB_SITES_SUBSITE_KEY']} = new stdClass;
                 }
-                $selectedSite = $selectedSite->{$childSlug}->{self::DB_SITES_SUBSITE_KEY};
+                $selectedSite = $selectedSite->{$childSlug}->{$GLOBALS['DB_SITES_SUBSITE_KEY']};
             }
         }
         $selectedSite->{$slug}->{$fieldname} = $content;
-        $this->set(self::DB_SITES_KEY, $allSites);
+        $this->set($GLOBALS['DB_SITES_KEY'], $allSites);
     }
 
     public function updateAction(): void
@@ -1291,7 +1278,7 @@ class Element
             require_once $location . '/functions.php';
         }
         $customSiteTemplate = sprintf('%s/%s.php', $location, $this->currentSite);
-        require_once file_exists($customSiteTemplate) ? $customSiteTemplate : $location . '/files.php';
+        require_once file_exists($customSiteTemplate) ? $customSiteTemplate : $location . '/index.php';
     }
 
     public function addListener(string $hook, callable $functionName): void
@@ -1358,13 +1345,13 @@ class Element
     public function deleteSiteKey(array $slugTree, string $fieldname): void
     {
         $slug = array_pop($slugTree);
-        $selectedSite = clone $this->get(self::DB_SITES_KEY);
+        $selectedSite = clone $this->get($GLOBALS['DB_SITES_KEY']);
         if (!empty($slugTree)) {
             foreach ($slugTree as $childSlug) {
-                if (!property_exists($selectedSite->{$childSlug}, self::DB_SITES_SUBSITE_KEY)) {
-                    $selectedSite->{$childSlug}->{self::DB_SITES_SUBSITE_KEY} = new stdClass;
+                if (!property_exists($selectedSite->{$childSlug}, $GLOBALS['DB_SITES_SUBSITE_KEY'])) {
+                    $selectedSite->{$childSlug}->{$GLOBALS['DB_SITES_SUBSITE_KEY']} = new stdClass;
                 }
-                $selectedSite = $selectedSite->{$childSlug}->{self::DB_SITES_SUBSITE_KEY};
+                $selectedSite = $selectedSite->{$childSlug}->{$GLOBALS['DB_SITES_SUBSITE_KEY']};
             }
         }
         unset($selectedSite->{$slug}->{$fieldname});
@@ -1381,9 +1368,9 @@ EOT;
         return $this->hook('css', '')[0];
     }
 
-    public function siteTitle(): string
+    public function title(): string
     {
-        $output = $this->get('config', 'siteTitle');
+        $output = $this->get('config', 'title');
         if ($this->loggedIn) {
             $output .= "<a data-toggle='element-modal' href='#optionsModal' data-target-tab='#navigation'><i class='editIcon'></i></a>";
         }
@@ -1544,7 +1531,7 @@ EOT;
         $output .= '
 							 <p class="subTitle">Website title</p>
 							 <div class="change">
-								<div data-target="config" id="siteTitle" class="editText">' . $this->get('config', 'siteTitle') . '</div>
+								<div data-target="config" id="title" class="editText">' . $this->get('config', 'title') . '</div>
 							 </div>
 							 <p class="subTitle">Navigation</p>
 							 <div>
@@ -1769,13 +1756,13 @@ EOT;
 							</div>
 						</div>";
                 switch ($addonType) {
-                    case self::FILES_PLUGINS_TYPES['updates']:
+                    case $GLOBALS['FILES_PLUGINS_TYPES']['updates']:
                         $updates .= $html;
                         break;
-                    case self::FILES_PLUGINS_TYPES['exists']:
+                    case $GLOBALS['FILES_PLUGINS_TYPES']['exists']:
                         $exists .= $html;
                         break;
-                    case self::FILES_PLUGINS_TYPES['installs']:
+                    case $GLOBALS['FILES_PLUGINS_TYPES']['installs']:
                     default:
                         $installs .= $html;
                         break;
@@ -1800,21 +1787,21 @@ EOT;
         return $output;
     }
 
-    public function listAllModules(string $type = self::FILES_DIR): array
+    public function listAllModules(): array
     {
         $newData = [];
         if ($this->loggedIn) {
-            $data = $this->getModulesCachedData($type);
+            $data = $this->getModulesCachedData($GLOBALS['FILES_DIR']);
             foreach ($data as $dirName => $addon) {
-                $exists = is_dir($GLOBALS['APP_DIR'] . "/$type/" . $dirName);
-                $currentBUILD = $exists ? $this->getModuleBUILD($type, $dirName) : null;
+                $exists = is_dir($GLOBALS['APP_DIR'] . "/" . $GLOBALS['FILES_DIR'] . "/" . $dirName);
+                $currentBUILD = $exists ? $this->getModuleBUILD($GLOBALS['FILES_DIR'], $dirName) : null;
                 $newBUILD = $addon['BUILD'];
                 $update = $newBUILD !== null && $currentBUILD !== null && $newBUILD > $currentBUILD;
                 if ($update) {
-                    $this->alert('info', 'New ' . $type . ' update available. <b><a data-toggle="element-modal" href="#optionsModal" data-target-tab="#' . $type . '">Open ' . $type . '</a></b>');
+                    $this->alert('info', 'New ' . $GLOBALS['FILES_DIR'] . ' update available. <b><a data-toggle="element-modal" href="#optionsModal" data-target-tab="#' . $GLOBALS['FILES_DIR'] . '">Open ' . $GLOBALS['FILES_DIR'] . '</a></b>');
                 }
-                $addonType = $exists ? self::FILES_PLUGINS_TYPES['exists'] : self::FILES_PLUGINS_TYPES['installs'];
-                $addonType = $update ? self::FILES_PLUGINS_TYPES['updates'] : $addonType;
+                $addonType = $exists ? $GLOBALS['FILES_PLUGINS_TYPES']['exists'] : $GLOBALS['FILES_PLUGINS_TYPES']['installs'];
+                $addonType = $update ? $GLOBALS['FILES_PLUGINS_TYPES']['updates'] : $addonType;
                 $newData[$addonType][$dirName] = $addon;
                 $newData[$addonType][$dirName]['update'] = $update;
                 $newData[$addonType][$dirName]['install'] = !$exists;
