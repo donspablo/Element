@@ -2,8 +2,9 @@
 
 <p align="center"><img align="center" src="assets/image (2).gif" /></p>
 
-<p >⚡Element (aka jnr.) is 500X Faster Caching than Redis/Memcache/APC in PHP & HHVM. Utilizing a flat-file database system stored as json objects in files on the disc drive. The PHP API Service, which was developed as part of the open-source initiative, is used by Element to connect to the database.</p > 
-<p >Element CSS's user interface (UI) and backend software are both free and open-source, which means they can be downloaded and used without restriction. The user interface (UI) and backend software for Element CSS are both available for download and installation on a personal computer.</p>
+<p >⚡ Element (aka jnr.) is 450X Faster Caching than Redis/Memcache/APC in PHP & HHVM.</p>
+<p>Utilizing a flat-file database system stored as json objects in files on the disc drive. The PHP API Service, which was developed as part of the open-source initiative, is used by Element to connect to the database.</p > 
+<p >The Element user interface (UI) and backend are both free and open-source, which means they can be downloaded and used without restriction. The user interface (UI) and backend software for Element CSS are both available for download and installation on a personal computer.</p>
 
 # Performance
 
@@ -92,7 +93,7 @@ class FileCache {
     apc_fetch($CACHE_KEY);
     microtime(true) - $B; 
     
-    // ---> RESULTS: 0.061056137084961
+    // ---> RESULTS: 0.06105613708496144
 
 ```
 
@@ -107,8 +108,6 @@ class FileCache {
 - [Contributing to the Project](#Contributing-to-the-Project)
 - [Licensing and Ownership](#Licensing-and-Ownership)
 
-
-
 <a href="https://render.com/deploy?repo=https://github.com/donPabloNow/Element"><img align="center" src="https://render.com/images/deploy-to-render-button.svg" /></a>
 <a href="https://vercel.com/new/clone?repository-url=https://github.com/donPabloNow/Element"><img align="center" src="https://vercel.com/button" /></a>
 <a href="https://www.heroku.com/deploy/?template=https://gitpod.io/#https://github.com/donPabloNow/Element"><img align="center" src="https://www.herokucdn.com/deploy/button.svg" /></a>
@@ -122,7 +121,6 @@ class FileCache {
 <p align="center"><br /><img align="center" src="assets/image (1).gif" /><br /></p>
 
 <br />
-
 
 ## Road Map
 
@@ -147,6 +145,18 @@ class FileCache {
     - [x] Owners
     - [ ] Crate details
 
+<p align="center"><br /><img align="center" src="assets/image (3).gif" /><br /></p>
+
+
+<img src="assets/logosnag.png"/>
+
+
+Error monitoring and application stability management solution via Bugsnag. Stability is the key to making data-driven decisions on whether to build software or to fix bugs.
+
+<img src="assets/Bugsnag.gif"/>
+
+Recognized for best-in-class mobile support, our diagnostic data enables teams to reproduce and fix errors when they start to impact stability. Error reports are grouped by root-cause, sortable by business impact, and displayed alongside rich diagnostics.
+
 
 <br />
 
@@ -155,7 +165,6 @@ class FileCache {
 <p align="center"><br /><img align="center" src="assets/image (4).gif" /><br /></p>
 
 <br />
-
 
 ## Installation Instructions
 
@@ -233,14 +242,18 @@ https://gitpod.com/#https://github.com/donPabloNow/element
 
 <br />
 
-
 ## Usage & How to Guide
 
 ### Front-End - with members area.
-Navigate to the root of the project with your browser to view the Front-end of the project. On the front end you will find a stylish user registration and login form. After registering an account you will be able to login to the Front-End members area + dashboard.
+
+Navigate to the root of the project with your browser to view the Front-end of the project. On the front end you will
+find a stylish user registration and login form. After registering an account you will be able to login to the Front-End
+members area + dashboard.
 
 ### Back-end - with CMS and user management.
-To access the CMS you need to vist <base_url>/cms and login using the password 'P@ssw0rd', this should be change as soon as you have logged into the CMS.
+
+To access the CMS you need to vist <base_url>/cms and login using the password 'P@ssw0rd', this should be change as soon
+as you have logged into the CMS.
 
 ![image](https://user-images.githubusercontent.com/6468571/152181949-99b9aaa6-586e-4f64-826d-ec7616535d1c.png)
 
@@ -251,7 +264,6 @@ To access the CMS you need to vist <base_url>/cms and login using the password '
 <p align="center"><br /><img align="center" src="assets/image (9).gif" /><br /></p>
 
 <br />
-
 
 ## Contributing to the Project
 

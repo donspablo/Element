@@ -1,35 +1,34 @@
 class signIn {
-
     constructor() {
-        var dupUsername1 = 'Whoops, Looks like there is all ready an account registered with the Username';
-        var dupUsername2 = 'Please select something different.';
-        var usernameQuip = 'Usernames can contain upper and lower case letters, numbers and dashes only. Duplicate usernames are not allowed.';
-        var dupEmail = 'Whoops, Looks like there is all ready an account registered with that Email Address.';
-        var usernameReq = 'Your Account Username is required.';
-        var passReq = 'Your Account Password is required.';
-        var invalidSignin = 'Whoops, Invalid Sign In. Please check your Username and/or Password and try again.';
-        var signinSuccess = 'Cheer! Sign In Successfull';
-        var signinError = 'Uh oh, Looks like an unexpected error was encountered, and you were not Signed In.';
-        var newusernameReq = 'Your New Account will need a Username.';
-        var validEmailReq = 'Your New Account will need a valid Email Address.';
-        var newpassReq = 'Your New Account will need a Password.';
-        var newAccCreated = 'Your New Account has been successfully created.';
-        var newAccError = 'Looks like an unexpected error was encountered, and your New Account was unable to be created.';
-        var accountEmailReq = 'Your Account Email Address is required.';
-        var passResetSuccess = 'Your Account Password has been reset, and an email has been sent with the new password.';
-        var noAccError = 'Hmmm, An Account with that Email Address could not be found.';
-        var resetPassError = 'Looks like an unexpected error was encountered, and your Account Password could not be reset.';
+        const dupUsername1 = 'Whoops, Looks like there is all ready an account registered with the Username';
+        const dupUsername2 = 'Please select something different.';
+        const usernameQuip = 'Usernames can contain upper and lower case letters, numbers and dashes only. Duplicate usernames are not allowed.';
+        const dupEmail = 'Whoops, Looks like there is all ready an account registered with that Email Address.';
+        const usernameReq = 'Your Account Username is required.';
+        const passReq = 'Your Account Password is required.';
+        const invalidSignin = 'Whoops, Invalid Sign In. Please check your Username and/or Password and try again.';
+        const signinSuccess = 'Cheer! Sign In Successfull';
+        const signinError = 'Uh oh, Looks like an unexpected error was encountered, and you were not Signed In.';
+        const newusernameReq = 'Your New Account will need a Username.';
+        const validEmailReq = 'Your New Account will need a valid Email Address.';
+        const newpassReq = 'Your New Account will need a Password.';
+        const newAccCreated = 'Your New Account has been successfully created.';
+        const newAccError = 'Looks like an unexpected error was encountered, and your New Account was unable to be created.';
+        const accountEmailReq = 'Your Account Email Address is required.';
+        const passResetSuccess = 'Your Account Password has been reset, and an email has been sent with the new password.';
+        const noAccError = 'Hmmm, An Account with that Email Address could not be found.';
+        const resetPassError = 'Looks like an unexpected error was encountered, and your Account Password could not be reset.';
 
 
         document.querySelector('#newusername').blur(function () {
-            var username = document.querySelector("#newusername").val();
+            const username = document.querySelector("#newusername").val();
 
             if (username !== '') {
-                var post_data = {
+                const post_data = {
                     'username': username,
                     'requestType': 'usercheck'
                 };
-                $.post('./api.php?signin', post_data, function (data) {
+                this.$.post('./api.php?signin', post_data, function (data) {
                     if (data === '1') {
 
                         Notifi.addNotification({
@@ -47,27 +46,27 @@ class signIn {
         });
 
         document.querySelector('#newusername').focus(function () {
-            if (focused === 0) {
+            if (this.focused === 0) {
                 Notifi.addNotification({
                     color: 'info',
                     text: usernameQuip,
                     icon: '<i class="fa fa-info-circle"></i>',
                     timeout: 8000
                 });
-                focused++;
+                this.focused++;
             }
         });
 
         document.querySelector('#newemail').blur(function () {
-            var useremail = document.querySelector("#newemail").val();
+            const useremail = document.querySelector("#newemail").val();
 
             if (useremail !== '') {
 
-                var post_data = {
+                const post_data = {
                     'useremail': useremail,
                     'requestType': 'emailcheck'
                 };
-                $.post('./api.php?signin', post_data, function (data) {
+                this.$.post('./api.php?signin', post_data, function (data) {
                     if (data === '1') {
 
                         Notifi.addNotification({
@@ -88,8 +87,8 @@ class signIn {
 
             e.preventDefault();
 
-            var username = document.querySelector("#username").val();
-            var password = document.querySelector("#password").val();
+            const username = document.querySelector("#username").val();
+            const password = document.querySelector("#password").val();
 
             if (username === '') {
                 Notifi.addNotification({
@@ -114,13 +113,13 @@ class signIn {
             }
 
 
-            var post_data = {
+            const post_data = {
                 'username': username,
                 'password': password,
                 'requestType': 'signin'
             };
-            $.post('./api.php?signin', post_data, function (resdata) {
-                var datacheck = $.parseJSON(resdata).length;
+            this.$.post('./api.php?signin', post_data, function (resdata) {
+                const datacheck = this.$.parseJSON(resdata).length;
                 if (datacheck === 0) {
 
                     Notifi.addNotification({
@@ -133,7 +132,7 @@ class signIn {
 
                     document.querySelector("#username, #password").val('');
                 } else {
-                    $.each($.parseJSON(resdata), function (idx, obj) {
+                    this.$.each(this.$.parseJSON(resdata), function (idx, obj) {
                         if (obj[0] !== '') {
 
                             Notifi.addNotification({
@@ -165,9 +164,9 @@ class signIn {
         document.querySelector('#signup-btn').addEventListener("click", function (e) {
             e.preventDefault();
 
-            var username = document.querySelector("#newusername").val();
-            var useremail = document.querySelector("#newemail").val();
-            var password = document.querySelector("#newpass").val();
+            const username = document.querySelector("#newusername").val();
+            const useremail = document.querySelector("#newemail").val();
+            const password = document.querySelector("#newpass").val();
             if (username === '') {
                 Notifi.addNotification({
                     color: 'danger',
@@ -202,13 +201,13 @@ class signIn {
             }
 
 
-            var post_data = {
+            const post_data = {
                 'username': username,
                 'useremail': useremail,
                 'password': password,
                 'requestType': 'signup'
             };
-            $.post('./api.php?signin', post_data, function (data) {
+            this.$.post('./api.php?signin', post_data, function (data) {
                 if (data === '1') {
 
                     Notifi.addNotification({
@@ -237,7 +236,7 @@ class signIn {
         document.querySelector('#resetPass').addEventListener("click", function (e) {
             e.preventDefault();
 
-            var useremail = document.querySelector("#accountEmail").val();
+            const useremail = document.querySelector("#accountEmail").val();
 
             if (useremail === '') {
                 Notifi.addNotification({
@@ -251,11 +250,11 @@ class signIn {
             }
 
 
-            var post_data = {
+            const post_data = {
                 'useremail': useremail,
                 'requestType': 'resetpass'
             };
-            $.post('./api.php?signin', post_data, function (data) {
+            this.$.post('./api.php?signin', post_data, function (data) {
                 if (data === '1') {
 
                     Notifi.addNotification({

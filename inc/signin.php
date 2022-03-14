@@ -9,7 +9,7 @@ class signin
     {
         /*
         $db = new \txtDB();
-        $db->datadir = $GLOBALS['DBDIR'];
+        $db->datadir = $_ENV['DBDIR'];
 
         $mode = $_POST['requestType'];
         switch ($mode) {
@@ -38,9 +38,9 @@ class signin
     function sign($db, $username, $password)
     {
         /*
-                $table = new Store('USERS', $GLOBALS['DBDIR']);
+                $table = new Store('USERS', $_ENV['DBDIR']);
 
-                $userdata = $table->findOneBy([$GLOBALS['USERNAME'], '=', htmlspecialchars($username)]);
+                $userdata = $table->findOneBy([$_ENV['USERNAME'], '=', htmlspecialchars($username)]);
 
                 //$userdata = $db->selectWhere('USERS', $compClause, 1);
 
@@ -68,20 +68,20 @@ class signin
                 $randHash = substr($randomHash, 0, 8);
 
 
-                $newuser[$GLOBALS['USER_ID']] = $randHash;
-                $newuser[$GLOBALS['USERNAME']] = $usrname;
-                $newuser[$GLOBALS['PASSWORD']] = $pass;
-                $newuser[$GLOBALS['USER_EMAIL']] = $usremail;
-                $newuser[$GLOBALS['DATE_CREATED']] = $dateCreated;
+                $newuser[$_ENV['USER_ID']] = $randHash;
+                $newuser[$_ENV['USERNAME']] = $usrname;
+                $newuser[$_ENV['PASSWORD']] = $pass;
+                $newuser[$_ENV['USER_EMAIL']] = $usremail;
+                $newuser[$_ENV['DATE_CREATED']] = $dateCreated;
 
                 $new_user = $db->insert(
                     'USERS',
                     $newuser
                 );
 
-                $userinfo[$GLOBALS['USER_ID']] = $randHash;
-                $userinfo[$GLOBALS['USERNAME']] = $usrname;
-                $userinfo[$GLOBALS['DATE_CREATED']] = $dateCreated;
+                $userinfo[$_ENV['USER_ID']] = $randHash;
+                $userinfo[$_ENV['USERNAME']] = $usrname;
+                $userinfo[$_ENV['DATE_CREATED']] = $dateCreated;
 
 
                 $userFile = $usrname . '-' . $randHash;
@@ -93,28 +93,28 @@ class signin
                 );
 
 
-                $subject = $GLOBALS['SITE_NAME'] . ' New Account Created';
+                $subject = $_ENV['SITE_NAME'] . ' New Account Created';
 
                 $message = '<html><body>';
                 $message .= '<h3>' . $subject . '</h3>';
                 $message .= '<p>';
                 $message .= 'Your new account has been successfully created, and you can now sign in.<br />';
-                $message .= '<a href="' . $GLOBALS['SITE_URL'] . 'sign-in.php">Sign In</a>';
+                $message .= '<a href="' . $_ENV['SITE_URL'] . 'sign-in.php">Sign In</a>';
                 $message .= '</p>';
                 $message .= '<p>Username: ' . $usrname . '<br />Password: The password you signed up with.</p>';
                 $message .= '<hr />';
-                $message .= '<p>Thank You,<br>' . $GLOBALS['SITE_NAME'] . '</p>';
+                $message .= '<p>Thank You,<br>' . $_ENV['SITE_NAME'] . '</p>';
                 $message .= '</body></html>';
 
-                $headers = 'From: ' . $GLOBALS['SITE_NAME'] . ' <' . $GLOBALS['SITE_EMAIL'] . ">\r\n";
-                $headers .= 'Reply-To: ' . $GLOBALS['SITE_EMAIL'] . "\r\n";
+                $headers = 'From: ' . $_ENV['SITE_NAME'] . ' <' . $_ENV['SITE_EMAIL'] . ">\r\n";
+                $headers .= 'Reply-To: ' . $_ENV['SITE_EMAIL'] . "\r\n";
                 $headers .= "MIME-BUILD: 1.0\r\n";
                 $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
 
                 mail($usremail, $subject, $message, $headers);
 
 
-                $checkFile = $GLOBALS['APP_DIR'] . '/data/' . $userFile;
+                $checkFile = $_ENV['APP_DIR'] . '/data/' . $userFile;
 
                 if (is_dir($checkFile)) {
                     echo '1';
@@ -132,7 +132,7 @@ class signin
 
         $userdata = $db->selectWhere(
             'USERS',
-            new SimpleWhereClause($GLOBALS['USER_EMAIL'], '=', $useremail)
+            new SimpleWhereClause($_ENV['USER_EMAIL'], '=', $useremail)
         );
 
         if (empty($userdata)) {
@@ -155,14 +155,14 @@ class signin
 
             $db->updateSetWhere(
                 'USERS', [
-                $GLOBALS['PASSWORD'] => $newpass,
+                $_ENV['PASSWORD'] => $newpass,
             ],
                 new SimpleWhereClause(
                     USER_ID, '=', $uid
                 )
             );
 
-            $subject = $GLOBALS['SITE_NAME'] . ' Account Password Reset';
+            $subject = $_ENV['SITE_NAME'] . ' Account Password Reset';
 
             $message = '<html><body>';
             $message .= '<h3>' . $subject . '</h3>';
@@ -172,11 +172,11 @@ class signin
             $message .= '</p>';
             $message .= '<p>Once you have signed in, please take the time to update your account password to something you can easily remember.</p>';
             $message .= '<hr />';
-            $message .= '<p>Thank You,<br>' . $GLOBALS['SITE_NAME'] . '</p>';
+            $message .= '<p>Thank You,<br>' . $_ENV['SITE_NAME'] . '</p>';
             $message .= '</body></html>';
 
-            $headers = 'From: ' . $GLOBALS['SITE_NAME'] . ' <' . $GLOBALS['SITE_EMAIL'] . ">\r\n";
-            $headers .= 'Reply-To: ' . $GLOBALS['SITE_EMAIL'] . "\r\n";
+            $headers = 'From: ' . $_ENV['SITE_NAME'] . ' <' . $_ENV['SITE_EMAIL'] . ">\r\n";
+            $headers .= 'Reply-To: ' . $_ENV['SITE_EMAIL'] . "\r\n";
             $headers .= "MIME-BUILD: 1.0\r\n";
             $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
 
@@ -196,7 +196,7 @@ class signin
 
         $userdata = $db->selectWhere(
             'USERS',
-            new SimpleWhereClause($GLOBALS['USERNAME'], '=', $usrname, $GLOBALS['DEFAULT_COMPARISON'])
+            new SimpleWhereClause($_ENV['USERNAME'], '=', $usrname, $_ENV['DEFAULT_COMPARISON'])
         );
 
         echo (empty($userdata)) ? '0' : '1';
@@ -212,7 +212,7 @@ class signin
 
         $userdata = $db->selectWhere(
             'USERS',
-            new SimpleWhereClause($GLOBALS['USER_EMAIL'], '=', $useremail, $GLOBALS['DEFAULT_COMPARISON'])
+            new SimpleWhereClause($_ENV['USER_EMAIL'], '=', $useremail, $_ENV['DEFAULT_COMPARISON'])
         );
 
         echo empty($userdata) ? '0' : '1';
